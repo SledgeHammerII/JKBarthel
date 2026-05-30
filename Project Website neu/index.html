@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>J K Barthel – Variante B (Cover)</title>
+
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        background: black;
+        font-family: Arial, sans-serif;
+    }
+
+    #bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    .sign {
+        position: absolute;
+        transform-origin: center center;
+        pointer-events: auto;
+        cursor: pointer;
+        transition: transform 0.25s ease-out, filter 0.25s ease-out;
+    }
+
+    .sign:hover {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 12px rgba(255,255,200,0.8));
+    }
+
+    .title {
+        position: absolute;
+        top: 2%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 48px;
+        font-weight: bold;
+        color: white;
+        text-shadow: 0 0 12px rgba(0,0,0,0.8);
+        z-index: 20;
+        pointer-events: none;
+    }
+</style>
+</head>
+
+<body>
+
+<img id="bg" src="img/hintergrund.png">
+<div class="title">J K Barthel</div>
+
+<div class="overlay">
+    <img id="books"        class="sign" src="/img/books.png" onclick="go('/pages/books.html')">
+    <img id="audiobooks"   class="sign" src="/img/audiobooks.png" onclick="go('audiobooks.html')">
+    <img id="author"       class="sign" src="/img/about the author.png" onclick="go('author.html')">
+    <img id="art"          class="sign" src="/img/art gallery.png" onclick="go('art.html')">
+    <img id="shortfilms"   class="sign" src="/img/shortfilms.png" onclick="go('shortfilms.html')">
+    <img id="contact"      class="sign" src="/img/contact.png" onclick="go('contact.html')">
+</div>
+
+<script>
+const baseScale = 0.15;
+
+const signs = [
+    { id: "books",      x: 0.16, y: 0.88, depth: 0.95 },
+    { id: "audiobooks", x: 0.10, y: 0.52, depth: 0.70 },
+    { id: "author",     x: 0.80, y: 0.90, depth: 1.00 },
+    { id: "art",        x: 0.93, y: 0.32, depth: 0.65 },
+    { id: "shortfilms", x: 0.50, y: 0.82, depth: 0.85 },
+    { id: "contact",    x: 0.50, y: 0.65, depth: 0.10 }
+];
+
+function positionSigns() {
+    const bg = document.getElementById("bg");
+    const rect = bg.getBoundingClientRect();
+
+    signs.forEach(s => {
+        const el = document.getElementById(s.id);
+
+        const depthScale = 0.75 + s.depth * 0.25;
+        const width = rect.width * baseScale * depthScale;
+
+        el.style.width = width + "px";
+        el.style.left = (rect.left + rect.width * s.x - width / 2) + "px";
+        el.style.top  = (rect.top  + rect.height * s.y - width / 4) + "px";
+    });
+}
+
+function go(url) {
+    window.location.href = url;
+}
+
+window.addEventListener("resize", positionSigns);
+window.addEventListener("load", positionSigns);
+</script>
+
+</body>
+</html>
