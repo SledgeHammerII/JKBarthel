@@ -5,7 +5,7 @@
     <title>Write to the Author</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Google Fonts -->
+    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,65 +15,76 @@
             margin: 0;
             padding: 0;
             font-family: 'Baloo 2', cursive;
-
-            background-image: url("../img/contact/PapyrusrolleHolz2.png");
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-
-            min-height: 100vh;
-            height: 100vh;
-            overflow: hidden;
+            background-color: #f7f1e3;
 
             display: flex;
             justify-content: center;
             align-items: center;
 
-            background-color: #f7f1e3;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        .contact-box {
+        /* Wrapper für Pergament + Formular */
+        .scroll-wrapper {
+            position: relative;
             width: 100%;
-            max-width: 700px;
-            background: transparent;
-            padding: 4vw 5vw;
-            border-radius: 10px;
-            margin: 0 auto;
+            max-width: 900px;
+            height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Pergament als echtes Bild */
+        .scroll-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none; /* Bild nicht anklickbar */
+            user-select: none;
+        }
+
+        /* Kontaktbox über dem Pergament */
+        .contact-box {
+            position: absolute;
+            width: 70%;
+            max-width: 600px;
+            text-align: center;
         }
 
         h1 {
-            text-align: center;
             margin: 0 0 10px 0;
             font-size: clamp(1.8rem, 4vw, 3rem);
             letter-spacing: 0.05em;
         }
 
         .intro-text {
-            text-align: center;
             font-style: italic;
             font-size: clamp(1rem, 2.5vw, 1.4rem);
             color: #3a2f22;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             line-height: 1.4;
         }
 
         label {
             font-weight: bold;
-            margin-bottom: 5px;
             display: block;
+            margin-bottom: 5px;
             font-size: clamp(1rem, 2vw, 1.3rem);
+            text-align: left;
         }
 
         input, textarea {
             width: 100%;
-            max-width: 500px;
-            margin: 0 auto 20px auto;
-            display: block;
-
             padding: 12px;
+            margin-bottom: 15px;
+
             border: none;
             border-bottom: 1px solid rgba(60, 40, 20, 0.3);
             background: transparent;
+
             font-family: inherit;
             font-size: clamp(1rem, 2vw, 1.3rem);
             color: #2a1a0f;
@@ -82,95 +93,71 @@
 
         textarea {
             height: 15vh;
-            resize: vertical;
-        }
-
-        input::placeholder,
-        textarea::placeholder {
-            color: rgba(60, 40, 20, 0.5);
-            font-style: italic;
+            resize: none;
         }
 
         .helper-text {
             font-size: clamp(0.9rem, 2vw, 1.2rem);
             font-style: italic;
             color: #3a2f22;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .send-button {
-            border: none;
-            background: none;
-            cursor: pointer;
-            display: block;
-            margin: 20px auto 0 auto;
+            margin-top: 5px;
+            margin-bottom: 15px;
         }
 
         .send-button img {
             width: clamp(120px, 25vw, 200px);
             height: auto;
-            display: block;
+            cursor: pointer;
         }
 
         /* Handy */
         @media (max-width: 600px) {
-            body {
-                padding: 0;
-            }
-
             .contact-box {
-                padding: 4vw;
+                width: 80%;
             }
 
             textarea {
                 height: 18vh;
             }
         }
-
-        /* TV / große Monitore */
-        @media (min-width: 1600px) {
-            .contact-box {
-                max-width: 900px;
-            }
-
-            textarea {
-                height: 20vh;
-            }
-        }
     </style>
 </head>
 
 <body>
-    <div class="contact-box">
-        <h1>Write to the Author</h1>
+    <div class="scroll-wrapper">
+        <!-- Pergament als Bild -->
+        <img src="../img/contact/PapyrusrolleHolz2.png" class="scroll-bg" alt="Scroll Background">
 
-        <p class="intro-text">
-            Have a question, a favorite character, or a magical idea?<br>
-            Send a message and step into the adventure!
-        </p>
+        <!-- Kontaktformular -->
+        <div class="contact-box">
+            <h1>Write to the Author</h1>
 
-        <!-- ⭐ HIER DEINE FORMSPREE-ID EINSETZEN ⭐ -->
-        <form action="https://formspree.io/f/DEINE-ID-HIER" method="POST">
-
-            <label for="name">Name</label>
-            <input id="name" name="name" type="text" required placeholder="Your name">
-
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" required placeholder="Your email">
-
-            <label for="message">Your Message</label>
-            <textarea id="message" name="message" required placeholder="Write your message here..."></textarea>
-
-            <p class="helper-text">
-                Parents can also contact me for school readings, collaborations, and events.
+            <p class="intro-text">
+                Have a question, a favorite character, or a magical idea?<br>
+                Send a message and step into the adventure!
             </p>
 
-            <button class="send-button" type="submit">
-                <img src="../img/contact/Sendbutton.png" alt="Send Message">
-            </button>
+            <form action="https://formspree.io/f/DEINE-ID-HIER" method="POST">
 
-        </form>
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text" required placeholder="Your name">
+
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" required placeholder="Your email">
+
+                <label for="message">Your Message</label>
+                <textarea id="message" name="message" required placeholder="Write your message here..."></textarea>
+
+                <p class="helper-text">
+                    Parents can also contact me for school readings, collaborations, and events.
+                </p>
+
+                <button class="send-button" type="submit">
+                    <img src="../img/contact/Sendbutton.png" alt="Send Message">
+                </button>
+
+            </form>
+        </div>
     </div>
 </body>
 </html>
