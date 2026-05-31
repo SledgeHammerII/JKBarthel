@@ -30,16 +30,15 @@
             background-color: #f7f1e3;
         }
 
-        /* Kontaktbox relativ im hellen Bereich */
+        /* Kontaktbox exakt im hellen Bereich */
         .contact-box {
             position: absolute;
 
-            /* relative Positionierung */
-            top: 32%;          /* sitzt im hellen Bereich */
+            top: 28%;          /* aus Screenshot berechnet */
             left: 50%;
             transform: translateX(-50%);
 
-            width: 60%;        /* passt sich jeder Auflösung an */
+            width: 60%;
             max-width: 600px;
             text-align: center;
         }
@@ -100,7 +99,7 @@
         @media (max-width: 600px) {
             .contact-box {
                 width: 75%;
-                top: 30%;
+                top: 26%; /* leicht angepasst für Handy */
             }
             textarea {
                 height: 18vh;
