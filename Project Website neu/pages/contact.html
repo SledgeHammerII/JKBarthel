@@ -87,12 +87,16 @@
     }
 
     .helper-text {
-        font-size: clamp(0.8rem, 1.2vw, 1rem);
-        font-style: italic;
-        margin-top: -7.5vh; /* minimal höher */
-        user-select: none;
-        color: #3a2f22;
-    }
+		position: absolute;   /* fixiert den Text */
+		bottom: 3vh;          /* Höhe über dem unteren Rand der Rolle */
+		left: 50%;            /* zentriert */
+		transform: translateX(-50%);
+		font-size: clamp(0.8rem, 1.2vw, 1rem);
+		font-style: italic;
+		user-select: none;
+		color: #3a2f22;
+}
+
 
     /* SEND-BUTTON – deutlich höher und weiter links */
     .send-button {
