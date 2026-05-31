@@ -4,78 +4,81 @@
     <meta charset="UTF-8">
     <title>Write to the Author</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
         body {
             margin: 0;
-            padding: 0;
-            font-family: 'Baloo 2', cursive; /* Schriftart geändert */
+            padding: 5vw;
+            font-family: 'Baloo 2', cursive;
+
             background-image: url("../img/contact/PapyrusrolleHolz2.png");
-            background-size: contain;
+            background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            align-items: center;
-			padding-top: 0;
-			background-color: #f7f1e3;
+
+            background-color: #f7f1e3;
         }
 
         .contact-box {
-            width: 90%;
+            width: 100%;
             max-width: 700px;
             background: transparent;
-            padding: 30px 40px;
+            padding: 4vw 5vw;
             border-radius: 10px;
-			margin: 50px auto 0 auto; /* zentriert */
+            margin: 0 auto;
         }
 
         h1 {
             text-align: center;
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-size: 2rem;
+            margin: 0 0 10px 0;
+            font-size: clamp(1.8rem, 4vw, 3rem);
             letter-spacing: 0.05em;
-			margin-left: 0; /* weiter nach links */
         }
 
         .intro-text {
             text-align: center;
             font-style: italic;
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
             color: #3a2f22;
             margin-bottom: 25px;
             line-height: 1.4;
-			margin-left: 0; /* nach links verschieben */
         }
 
         label {
             font-weight: bold;
             margin-bottom: 5px;
             display: block;
+            font-size: clamp(1rem, 2vw, 1.3rem);
         }
 
         input, textarea {
-            width: 70%;
-			margin: 0 auto;
-			display: block;
-            padding: 10px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 20px auto;
+            display: block;
+
+            padding: 12px;
             border: none;
             border-bottom: 1px solid rgba(60, 40, 20, 0.3);
             background: transparent;
             font-family: inherit;
-            font-size: 1rem;
+            font-size: clamp(1rem, 2vw, 1.3rem);
             color: #2a1a0f;
             outline: none;
         }
 
         textarea {
-            height: 250px; /* mehrere Zeilen */
+            height: 25vh;
             resize: vertical;
         }
 
@@ -86,25 +89,51 @@
         }
 
         .helper-text {
-			font-size: 0.9rem;
-			font-style: italic;
-			color: #3a2f22;
-			margin-top: -200px;   /* höher = kleinerer Wert */
-			margin-left: 0px; /* weiter nach links */
-		}
+            font-size: clamp(0.9rem, 2vw, 1.2rem);
+            font-style: italic;
+            color: #3a2f22;
+            margin-top: 10px;
+            text-align: center;
+        }
 
         .send-button {
             border: none;
             background: none;
             cursor: pointer;
             display: block;
-            margin: 10px auto 0 auto; /* etwas tiefer */
+            margin: 20px auto 0 auto;
         }
 
         .send-button img {
-            width: 160px;
+            width: clamp(120px, 25vw, 200px);
             height: auto;
             display: block;
+        }
+
+        /* Handy */
+        @media (max-width: 600px) {
+            body {
+                padding: 3vw;
+            }
+
+            .contact-box {
+                padding: 6vw;
+            }
+
+            textarea {
+                height: 30vh;
+            }
+        }
+
+        /* TV / große Monitore */
+        @media (min-width: 1600px) {
+            .contact-box {
+                max-width: 900px;
+            }
+
+            textarea {
+                height: 20vh;
+            }
         }
     </style>
 </head>
