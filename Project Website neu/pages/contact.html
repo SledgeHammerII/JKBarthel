@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <title>Write to the Author</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: "Georgia", serif;
+            font-family: 'Baloo 2', cursive; /* Schriftart geändert */
             background-image: url("../img/contact/PapyrusrolleHolz2.png");
             background-size: cover;
             background-position: center;
@@ -18,7 +21,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding-top: 120px;
+            padding-top: 60px;
 			background-color: #f7f1e3;
         }
 
@@ -38,6 +41,7 @@
             margin-bottom: 10px;
             font-size: 2rem;
             letter-spacing: 0.05em;
+			margin-left: -60px; /* weiter nach links */
         }
 
         .intro-text {
@@ -47,6 +51,7 @@
             color: #3a2f22;
             margin-bottom: 25px;
             line-height: 1.4;
+			margin-left: -50px; /* nach links verschieben */
         }
 
         label {
@@ -56,7 +61,7 @@
         }
 
         input, textarea {
-            width: 100%;
+            width: 70%;
             padding: 10px;
             border: none;
             border-bottom: 1px solid rgba(60, 40, 20, 0.3);
@@ -86,7 +91,6 @@
 			margin-left: 0px; /* weiter nach links */
 		}
 
-
         .send-button {
             border: none;
             background: none;
@@ -112,7 +116,8 @@
             Send a message and step into the adventure!
         </p>
 
-        <form action="mailto:deineadresse@example.com" method="post" enctype="text/plain">
+        <!-- ⭐ HIER DEINE FORMSPREE-ID EINSETZEN ⭐ -->
+        <form action="https://formspree.io/f/DEINE-ID-HIER" method="POST">
 
             <label for="name">Name</label>
             <input id="name" name="name" type="text" required placeholder="Your name">
@@ -131,8 +136,7 @@
                 <img src="../img/contact/Sendbutton.png" alt="Send Message">
             </button>
 
-		<form action="https://formspree.io/f/DEINE-ID-HIER" method="POST">
-		</form>
+        </form>
     </div>
 </body>
 </html>
