@@ -20,18 +20,26 @@
             background-position: center;
             background-repeat: no-repeat;
 
-            height: 100vh; /* exakt Bildschirmhöhe */
-            overflow: hidden; /* kein Scrollen */
+            height: 100vh;
+            overflow: hidden;
 
             display: flex;
             justify-content: center;
-            align-items: center; /* Kontaktbox IMMER zentriert */
+            align-items: center;
 
             background-color: #f7f1e3;
         }
 
+        /* Kontaktbox relativ im hellen Bereich */
         .contact-box {
-            width: 70%; /* passt sich jeder Auflösung an */
+            position: absolute;
+
+            /* relative Positionierung */
+            top: 32%;          /* sitzt im hellen Bereich */
+            left: 50%;
+            transform: translateX(-50%);
+
+            width: 60%;        /* passt sich jeder Auflösung an */
             max-width: 600px;
             text-align: center;
         }
@@ -72,7 +80,7 @@
         }
 
         textarea {
-            height: 15vh; /* proportional zur Bildschirmhöhe */
+            height: 15vh;
             resize: none;
         }
 
@@ -91,7 +99,8 @@
 
         @media (max-width: 600px) {
             .contact-box {
-                width: 80%;
+                width: 75%;
+                top: 30%;
             }
             textarea {
                 height: 18vh;
