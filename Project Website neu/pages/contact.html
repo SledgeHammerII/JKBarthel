@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Write to the Author</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Georgia", serif;
+            background-image: url("../img/contact/PapyrusrolleHolz2.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 120px;
+			background-color: #f7f1e3;
+        }
+
+        .contact-box {
+            width: 90%;
+            max-width: 700px;
+            background: transparent;
+            padding: 30px 40px;
+            border-radius: 10px;
+			margin-top: 50px;   /* falls du sie tiefer haben willst */
+			margin-left: -110px; /* verschiebt die Box nach links */
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 2rem;
+            letter-spacing: 0.05em;
+        }
+
+        .intro-text {
+            text-align: center;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #3a2f22;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-bottom: 1px solid rgba(60, 40, 20, 0.3);
+            background: transparent;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #2a1a0f;
+            outline: none;
+        }
+
+        textarea {
+            height: 250px; /* mehrere Zeilen */
+            resize: vertical;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(60, 40, 20, 0.5);
+            font-style: italic;
+        }
+
+        .helper-text {
+			font-size: 0.9rem;
+			font-style: italic;
+			color: #3a2f22;
+			margin-top: -200px;   /* höher = kleinerer Wert */
+			margin-left: 0px; /* weiter nach links */
+		}
+
+
+        .send-button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto 0 auto; /* etwas tiefer */
+        }
+
+        .send-button img {
+            width: 160px;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contact-box">
+        <h1>Write to the Author</h1>
+
+        <p class="intro-text">
+            Have a question, a favorite character, or a magical idea?<br>
+            Send a message and step into the adventure!
+        </p>
+
+        <form action="mailto:deineadresse@example.com" method="post" enctype="text/plain">
+
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required placeholder="Your name">
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required placeholder="Your email">
+
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" required placeholder="Write your message here..."></textarea>
+
+            <p class="helper-text">
+                Parents can also contact me for school readings, collaborations, and events.
+            </p>
+
+            <button class="send-button" type="submit">
+                <img src="../img/contact/Sendbutton.png" alt="Send Message">
+            </button>
+
+		<form action="https://formspree.io/f/DEINE-ID-HIER" method="POST">
+		</form>
+    </div>
+</body>
+</html>
