@@ -5,7 +5,6 @@
     <title>Write to the Author</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,41 +14,24 @@
             margin: 0;
             padding: 0;
             font-family: 'Baloo 2', cursive;
+
+            background-image: url("../img/contact/PapyrusrolleHolz2.png");
+            background-size: contain; /* Pergament IMMER vollständig sichtbar */
+            background-position: center;
+            background-repeat: no-repeat;
+
+            height: 100vh; /* exakt Bildschirmhöhe */
+            overflow: hidden; /* kein Scrollen */
+
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Kontaktbox IMMER zentriert */
+
             background-color: #f7f1e3;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            height: 100vh;
-            overflow: hidden;
         }
 
-        /* Wrapper für Pergament + Formular */
-        .scroll-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 900px;
-            height: 100vh;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Pergament als echtes Bild */
-        .scroll-bg {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            pointer-events: none; /* Bild nicht anklickbar */
-            user-select: none;
-        }
-
-        /* Kontaktbox über dem Pergament */
         .contact-box {
-            position: absolute;
-            width: 70%;
+            width: 70%; /* passt sich jeder Auflösung an */
             max-width: 600px;
             text-align: center;
         }
@@ -57,7 +39,6 @@
         h1 {
             margin: 0 0 10px 0;
             font-size: clamp(1.8rem, 4vw, 3rem);
-            letter-spacing: 0.05em;
         }
 
         .intro-text {
@@ -65,7 +46,6 @@
             font-size: clamp(1rem, 2.5vw, 1.4rem);
             color: #3a2f22;
             margin-bottom: 20px;
-            line-height: 1.4;
         }
 
         label {
@@ -92,7 +72,7 @@
         }
 
         textarea {
-            height: 15vh;
+            height: 15vh; /* proportional zur Bildschirmhöhe */
             resize: none;
         }
 
@@ -100,7 +80,6 @@
             font-size: clamp(0.9rem, 2vw, 1.2rem);
             font-style: italic;
             color: #3a2f22;
-            margin-top: 5px;
             margin-bottom: 15px;
         }
 
@@ -110,12 +89,10 @@
             cursor: pointer;
         }
 
-        /* Handy */
         @media (max-width: 600px) {
             .contact-box {
                 width: 80%;
             }
-
             textarea {
                 height: 18vh;
             }
@@ -124,40 +101,34 @@
 </head>
 
 <body>
-    <div class="scroll-wrapper">
-        <!-- Pergament als Bild -->
-        <img src="../img/contact/PapyrusrolleHolz2.png" class="scroll-bg" alt="Scroll Background">
+    <div class="contact-box">
+        <h1>Write to the Author</h1>
 
-        <!-- Kontaktformular -->
-        <div class="contact-box">
-            <h1>Write to the Author</h1>
+        <p class="intro-text">
+            Have a question, a favorite character, or a magical idea?<br>
+            Send a message and step into the adventure!
+        </p>
 
-            <p class="intro-text">
-                Have a question, a favorite character, or a magical idea?<br>
-                Send a message and step into the adventure!
+        <form action="https://formspree.io/f/DEINE-ID-HIER" method="POST">
+
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required placeholder="Your name">
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required placeholder="Your email">
+
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" required placeholder="Write your message here..."></textarea>
+
+            <p class="helper-text">
+                Parents can also contact me for school readings, collaborations, and events.
             </p>
 
-            <form action="https://formspree.io/f/DEINE-ID-HIER" method="POST">
+            <button class="send-button" type="submit">
+                <img src="../img/contact/Sendbutton.png" alt="Send Message">
+            </button>
 
-                <label for="name">Name</label>
-                <input id="name" name="name" type="text" required placeholder="Your name">
-
-                <label for="email">Email</label>
-                <input id="email" name="email" type="email" required placeholder="Your email">
-
-                <label for="message">Your Message</label>
-                <textarea id="message" name="message" required placeholder="Write your message here..."></textarea>
-
-                <p class="helper-text">
-                    Parents can also contact me for school readings, collaborations, and events.
-                </p>
-
-                <button class="send-button" type="submit">
-                    <img src="../img/contact/Sendbutton.png" alt="Send Message">
-                </button>
-
-            </form>
-        </div>
+        </form>
     </div>
 </body>
 </html>
