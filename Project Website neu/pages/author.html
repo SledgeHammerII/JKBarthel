@@ -18,7 +18,7 @@ body {
 /* --- Header mit vollständigem Bild --- */
 .author-header {
     width: 100%;
-    height: auto;          /* Bereich ist fix 33% hoch */
+    height: 33vh;          /* Bereich ist fix 33% hoch */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,9 +27,9 @@ body {
 }
 
 .author-header img {
-    width: 100%;           /* Breite passt sich proportional an */
-    height: auto;          /* Höhe bleibt proportional */
-    object-fit: cover;   /* GANZES Bild sichtbar */
+    width: auto;           /* Breite passt sich proportional an */
+    height: 100%;          /* Höhe bleibt proportional */
+    object-fit: contain;   /* GANZES Bild sichtbar */
     display: block;
 }
 
