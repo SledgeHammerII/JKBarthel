@@ -16,25 +16,73 @@
         color: orange;
         font-size: 1.2rem;
     }
+body {
+    background: #000;
+    color: #fff;
+    font-family: 'Baloo 2', sans-serif;
+    padding: 40px;
+    text-align: center; /* Titel + Text mittig */
+}
+
+/* Bild zentrieren + Holzrahmen */
+.author-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.author-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%; /* Kreis */
+    border: 12px solid transparent;
+    padding: 0;
+    background-image: url('https://i.imgur.com/8p0Q2tD.jpeg'); /* Holztextur */
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 20px;
+}
+
+/* Textblock mittig und begrenzt */
+.text-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+a {
+    color: orange;
+    font-size: 1.2rem;
+}
 </style>
 </head>
 <body>
 
-<h1>Über den Autor</h1>
-<p>Hi! Mein Name ist Jakob Knut Barthel oder kurz gesagt J.K.Barthel.</p>
-<p>Und nein, ich bin nicht verwandt mit J.K. Rowling xD. Die Initialien der Vornamen sind rein zufällig die gleichen.</p>
+<div class="author-container">
+    <img src="/img/knut.png" alt="Autor" class="author-image">
+    <h1>Über den Autor</h1>
 
-<p>Mit 10 Jahren habe ich das Schreiben für mich entdeckt. Inspiriert von meinem Cousin Maurice und </p>
-<p>meiner Cousine Ayline wollte ich nicht nur echte Abenteuer mit ihnen erleben, sondern sie auch irgendwie festhalten.</p>
-<p>So enstand mein erster Werwolf-Roman "Trinn - Sohn des Werwolfjägers". Unsere echten Abenteuer und Rollenspiele</p>
-<p>führten uns ebenfalls in die Wälder, auf atemraubenden Fahrradtouren und geheimnisvollen Entdeckungen.</p>
-<p>Und an alle Pfadfinder da draußen: "Scouting for life". Ich selbst bin mit Leib und Seele Pfadfinder.</p>
-<p>Einige Lagererlebnisse flossen ebenfalls mit in die Romane ein.</p>
-<p>Ein weiteres Hobby von mir sind malen und zeichnen. So kam ich auf die Idee selbst gemalte Illustrationen</p>
-<p>für meine Bücher zu verwenden. </p>
-<p>
+    <div class="text-wrapper">
+        <p>Hi! Mein Name ist Jakob Knut Barthel oder kurz gesagt J.K.Barthel.</p>
+        <p>Und nein, ich bin nicht verwandt mit J.K. Rowling xD. Die Initialien der Vornamen sind rein zufällig die gleichen.</p>
 
-<a href="../index.html">← Zurück zur Startseite</a>
+        <p>Mit 10 Jahren habe ich das Schreiben für mich entdeckt. Inspiriert von meinem Cousin Maurice und 
+        meiner Cousine Ayline wollte ich nicht nur echte Abenteuer mit ihnen erleben, sondern sie auch irgendwie festhalten.</p>
+
+        <p>So enstand mein erster Werwolf-Roman "Trinn - Sohn des Werwolfjägers". Unsere echten Abenteuer und Rollenspiele
+        führten uns ebenfalls in die Wälder, auf atemraubenden Fahrradtouren und geheimnisvollen Entdeckungen.</p>
+
+        <p>Und an alle Pfadfinder da draußen: "Scouting for life". Ich selbst bin mit Leib und Seele Pfadfinder.
+        Einige Lagererlebnisse flossen ebenfalls mit in die Romane ein.</p>
+
+        <p>Ein weiteres Hobby von mir sind malen und zeichnen. So kam ich auf die Idee selbst gemalte Illustrationen
+        für meine Bücher zu verwenden.</p>
+
+        <a href="../index.html">← Zurück zur Startseite</a>
+    </div>
+</div>
 
 </body>
+
 </html>
