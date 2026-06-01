@@ -31,28 +31,25 @@ body {
     align-items: center;
 }
 
-.author-image {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 50%;
-    position: relative;
-    z-index: 2;
-}
-
-/* Holzrahmen außen herum */
 .author-image-wrapper {
-    width: 240px; /* etwas größer als das Bild */
+    width: 240px;
     height: 240px;
     border-radius: 50%;
-    background-image: url('https://i.imgur.com/8p0Q2tD.jpeg');
+    background-image: url('https://i.imgur.com/0zQ4YqF.jpeg'); /* Holztextur */
     background-size: cover;
     background-position: center;
-    padding: 20px; /* Abstand = Rahmenbreite */
+    padding: 20px; /* Rahmenbreite */
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
+}
+
+.author-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 /* Textblock mittig und begrenzt */
@@ -72,8 +69,9 @@ a {
 
 <div class="author-container">
     <div class="author-image-wrapper">
-        <img src="/img/knut.png" alt="Autor" class="author-image">
-    </div>
+    <img src="/img/knut.png" alt="Autor" class="author-image">
+</div>
+
 
     <h1>Über den Autor</h1>
 
