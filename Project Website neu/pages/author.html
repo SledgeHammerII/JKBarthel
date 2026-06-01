@@ -6,10 +6,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
     body {
-    background: #bfa27a;
-    color: #fff;
-    font-family: 'Baloo 2', Arial, sans-serif;
-    padding: 40px;
+    margin: 0;
+  min-height: 100vh;
+
+  /* Das Brett ist der Seitenhintergrund */
+  background-image: url("../img/author/author.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  /* Querformat erzwingen */
+  background-size: cover;     /* background-size: 100vw auto; : Bild orientiert sich an der Breite, nicht an der Höhe */
+
+  /* Optionaler Hintergrund hinter dem Brett */
+  background-color: #dcaa65; 
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100vh
+  padding: 1vh;
+  font-family: "Baloo 2", sans-serif;
+
 }
 
     a {
