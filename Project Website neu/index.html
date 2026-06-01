@@ -55,6 +55,30 @@
         z-index: 20;
         pointer-events: none;
     }
+.top-links {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 24px;
+    z-index: 20;
+}
+
+.tlink {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    pointer-events: auto;
+    text-shadow: 0 0 8px rgba(0,0,0,0.7);
+    transition: color 0.2s ease-out, text-shadow 0.2s ease-out;
+}
+
+.tlink:hover {
+    color: #ffe9a6;
+    text-shadow: 0 0 12px rgba(255,255,200,0.9);
+}
 </style>
 </head>
 
@@ -62,6 +86,11 @@
 
 <img id="bg" src="img/hintergrund.png">
 <div class="title">J K Barthel</div>
+<div class="top-links">
+    <div class="tlink" onclick="go('/pages/nutzungsbedingungen.html')">Nutzungsbedingungen</div>
+    <div class="tlink" onclick="go('/pages/urheberrecht.html')">Urheberrecht</div>
+    <div class="tlink" onclick="go('/pages/impressum.html')">Impressum</div>
+</div>
 
 <div class="overlay">
     <img id="books"        class="sign" src="/img/books.png" onclick="go('/pages/books.html')">
