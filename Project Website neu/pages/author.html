@@ -18,17 +18,18 @@ body {
 /* --- Header mit vollständigem Bild --- */
 .author-header {
     width: 100%;
-    max-height: 33vh;      /* maximal 33% der Höhe */
-    overflow: hidden;      /* falls Bild höher wäre */
+    height: 33vh;          /* Bereich ist fix 33% hoch */
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #bfa27a;
+    overflow: hidden;      /* keine Scrollbars */
+    background: #bfa27a;   /* Hintergrundfarbe falls Bild kleiner ist */
 }
 
 .author-header img {
-    width: 100%;
-    height: 100%;
+    max-height: 100%;      /* Bild darf maximal 33vh hoch sein */
+    width: auto;           /* Breite passt sich proportional an */
+    height: auto;          /* Höhe bleibt proportional */
     object-fit: contain;   /* GANZES Bild sichtbar */
     display: block;
 }
@@ -96,7 +97,7 @@ a {
         <div class="text-wrapper">
             <p>Hi! Mein Name ist Jakob Knut Barthel oder kurz gesagt J.K.Barthel.</p>
             <p>Und nein, ich bin nicht verwandt mit J.K. Rowling xD.</p>
-
+            <p>Die Initialien der Vornamen sind rein zufällig die gleichen.</p>
             <p>Mit 10 Jahren habe ich das Schreiben für mich entdeckt. Inspiriert von meinem Cousin Maurice und 
             meiner Cousine Ayline wollte ich nicht nur echte Abenteuer mit ihnen erleben, sondern sie auch irgendwie festhalten.</p>
 
