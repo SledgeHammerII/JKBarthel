@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <title>Über den Autor</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
+/* --- Grundlayout --- */
 body {
     margin: 0;
     background: #bfa27a;
@@ -13,23 +15,30 @@ body {
     text-align: center;
 }
 
-/* Bildbereich oben */
+/* --- Header mit vollständigem Bild --- */
 .author-header {
     width: 100%;
+    max-height: 33vh;      /* maximal 33% der Höhe */
+    overflow: hidden;      /* falls Bild höher wäre */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #bfa27a;
 }
 
 .author-header img {
     width: 100%;
-    height: auto;      /* komplettes Bild, kein Cropping */
+    height: 100%;
+    object-fit: contain;   /* GANZES Bild sichtbar */
     display: block;
 }
 
-/* Inhalt darunter */
+/* --- Inhalt darunter --- */
 .page-content {
     padding: 40px 20px;
 }
 
-/* Portrait + Rahmen */
+/* --- Portrait + Rahmen --- */
 .author-container {
     display: flex;
     flex-direction: column;
@@ -68,10 +77,12 @@ a {
 }
 </style>
 </head>
+
 <body>
 
+<!-- Header mit vollständigem Bild -->
 <div class="author-header">
-    <img src="../img/author/author.png" alt="Lagerfeuer-Szene">
+    <img src="../img/author/author.png" alt="Headerbild">
 </div>
 
 <div class="page-content">
@@ -84,12 +95,12 @@ a {
 
         <div class="text-wrapper">
             <p>Hi! Mein Name ist Jakob Knut Barthel oder kurz gesagt J.K.Barthel.</p>
-            <p>Und nein, ich bin nicht verwandt mit J.K. Rowling xD. Die Initialien der Vornamen sind rein zufällig die gleichen.</p>
+            <p>Und nein, ich bin nicht verwandt mit J.K. Rowling xD.</p>
 
             <p>Mit 10 Jahren habe ich das Schreiben für mich entdeckt. Inspiriert von meinem Cousin Maurice und 
             meiner Cousine Ayline wollte ich nicht nur echte Abenteuer mit ihnen erleben, sondern sie auch irgendwie festhalten.</p>
 
-            <p>So enstand mein erster Werwolf-Roman "Trinn - Sohn des Werwolfjägers". Unsere echten Abenteuer und Rollenspiele
+            <p>So entstand mein erster Werwolf-Roman "Trinn - Sohn des Werwolfjägers". Unsere echten Abenteuer und Rollenspiele
             führten uns ebenfalls in die Wälder, auf atemraubenden Fahrradtouren und geheimnisvollen Entdeckungen.</p>
 
             <p>Und an alle Pfadfinder da draußen: "Scouting for life". Ich selbst bin mit Leib und Seele Pfadfinder.
