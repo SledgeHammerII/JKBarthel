@@ -43,7 +43,7 @@
 
     /* Schreibblatt-Bereich */
     main {
-      min-height: 120vh; /* genug Inhalt zum Scrollen */
+      min-height: 150vh;
       background-color: #ffffff;
       background-image: 
         repeating-linear-gradient(
@@ -54,4 +54,68 @@
         );
       padding: 3rem 1rem 4rem;
       display: flex;
-      justify-content: center
+      justify-content: center;
+    }
+
+    .paper {
+      width: 100%;
+      max-width: 800px;
+      position: relative;
+    }
+
+    /* Linker Rand */
+    .paper::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 3rem;
+      width: 2px;
+      background: rgba(255, 0, 0, 0.4);
+    }
+
+    .paper-content {
+      padding-left: 4.5rem;
+      padding-right: 1.5rem;
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .paper::before {
+        left: 2rem;
+      }
+      .paper-content {
+        padding-left: 3.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Schweizer Berge</h1>
+  </header>
+
+  <main>
+    <div class="paper">
+      <div class="paper-content">
+        <h2>Digitales Schreibblatt</h2>
+        <p>Wenn du diesen Text siehst, funktioniert alles korrekt.</p>
+        <p>Scroll nach unten, um die Linien zu sehen.</p>
+        <p>Du kannst hier beliebig viel Text einfügen.</p>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
