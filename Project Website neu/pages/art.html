@@ -19,21 +19,16 @@
 
     /* Oberes Drittel: Schweizer Berge */
     header {
-      height: 33vh;
-      min-height: 220px;
-      background-image:
-        linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0.1)),
-        url("/img/author/author.png");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 2rem;
-      color: #fff;
-      text-align: center;
-    }
+  width: 100%;
+  height: auto;
+  background-image: url("/img/author/author-1920x640.png");
+  background-size: contain;   /* zeigt das ganze Bild */
+  background-repeat: no-repeat;
+  background-position: center;
+  aspect-ratio: 3 / 1;        /* garantiert 3:1 */
+  background-color: #000;     /* falls Ränder entstehen */
+}
+
 
     header h1 {
       font-size: clamp(1.8rem, 3vw, 2.6rem);
