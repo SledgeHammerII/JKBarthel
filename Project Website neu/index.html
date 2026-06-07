@@ -11,7 +11,7 @@
 /* ---------------------------------------------------
    GLOBAL
 --------------------------------------------------- */
- {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -87,24 +87,23 @@ body {
     position: fixed;
     bottom: 2vh;
     left: 50%;
-    width: 75%;
     transform: translateX(-50%);
     display: flex;
-    gap: 1.8vw;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem; /* Abstand zwischen Buttons */
+    width: 90%;
     z-index: 20;
 }
 
 .button-bar a {
-    width: 12vw;
-    max-width: 160px;
-    transform: scale(1.25);
+    flex: 1 1 120px; /* skaliert automatisch */
+    max-width: 150px;
 }
 
 .button-bar img {
     width: 100%;
     height: auto;
-    border-radius: 8px;
-    transition: 0.3s ease;
 }
 
 .button-bar img:hover {
@@ -135,22 +134,21 @@ body {
     top: 2vh;
     right: 3vw;
     font-size: 3rem;
-    color: #000;
+    color: #4b2e0a; /* besser sichtbar */
     cursor: pointer;
-    z-index: 9999;
-    display: none;
+    z-index: 20000;
+    display: block; /* IMMER sichtbar */
 }
 
 .mobile-menu {
     display: none;
     position: fixed;
-    top: 8vh;
+    top: 10vh;
     right: 3vw;
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.95);
     border-radius: 10px;
     padding: 1rem 1.5rem;
-    z-index: 9999;
-    text-align: right;
+    z-index: 20000;
 }
 
 .mobile-menu a {
@@ -163,8 +161,39 @@ body {
 
 /* Mobile aktivieren */
 @media (max-width: 900px) {
-    .menu-icon {
-        display: block;
+
+    .video-layer {
+        width: 40vw;
+        left: 30%;
+        top: 35%;
+    }
+
+    .button-bar {
+        bottom: 4vh;
+        gap: 1.2rem;
+    }
+
+    .page-title {
+        font-size: 6vw;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .video-layer {
+        width: 55vw;
+        left: 22%;
+        top: 30%;
+    }
+
+    .button-bar {
+        width: 95%;
+        gap: 1rem;
+    }
+
+    .button-bar a {
+        flex: 1 1 45%;
+        max-width: none;
     }
 }
 
@@ -172,6 +201,8 @@ body {
 </head>
 
 <body>
+
+<div class="page-title">Jakob Knut Barthel</div>
 
 <!-- HAMBURGER ICON -->
 <div class="menu-icon" onclick="toggleMenu()">☰</div>
