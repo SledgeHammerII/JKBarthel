@@ -30,11 +30,10 @@ body {
 --------------------------------------------------- */
 .video-layer {
     position: fixed;
-    top: 300px;     /* exakt fix */
-    left: 250px;    /* exakt fix */
-    width: 320px;   /* exakt fix */
-    height: auto;
-    transform: translateY(-50%);
+    top: calc(50% - 6vh);
+    left: calc(50% - 12vw);
+    width: 22vw;
+    transform: translate(-50%, -50%);
     object-fit: cover;
     z-index: -1;
 }
@@ -52,10 +51,9 @@ body {
 
     /* HIER liegt dein neues Bild – einfach die ausgetauschte Datei RolleT.png */
     background-image: url("/img/index/RolleT.png");
-    background-size: cover;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-
     z-index: 5;
     pointer-events: none;
 }
