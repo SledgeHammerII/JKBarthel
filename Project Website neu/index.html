@@ -28,18 +28,26 @@ body {
 /* ---------------------------------------------------
    VIDEO HINTER DEM LOCH
 --------------------------------------------------- */
-.roll-container {
+.mask-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: auto;
-}
+    height: 100vh;
 
-.roll-image {
-    width: 100%;
-    height: auto;
-    display: block;
+    -webkit-mask-image: url("/img/index/RolleT.png");
+    mask-image: url("/img/index/RolleT.png");
+
+    -webkit-mask-size: contain;
+    mask-size: contain;
+
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+
+    -webkit-mask-position: center;
+    mask-position: center;
+
+    pointer-events: none;
 }
 
 .video-layer {
@@ -49,7 +57,6 @@ body {
     width: 22vw;
     transform: translate(-50%, -50%);
     object-fit: cover;
-    z-index: 10;
 }
 
 /* ---------------------------------------------------
@@ -192,12 +199,13 @@ body {
   <a href="/pages/Nutzungsbedingungen.html">Nutzungsbedingungen</a>
 </nav>
 
-<div class="roll-container">
-    <img src="/img/index/RolleT.png" class="roll-image">
+<div class="mask-container">
     <video class="video-layer" autoplay muted loop>
         <source src="/img/index/TrinnAnimation720.mp4" type="video/mp4">
     </video>
 </div>
+
+<img src="/img/index/RolleT.png" class="roll-image">
 
 <!-- BUTTON-LEISTE -->
 <div class="button-bar">
