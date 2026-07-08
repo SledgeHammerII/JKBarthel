@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurzbeschreibung – Trinn</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="book-reader.css">
+</head>
+<body>
+
+  <div id="bookReaderMount"></div>
+
+  <script src="trinn-data.js"></script>
+  <script src="book-reader.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const band = parseInt(params.get('band'), 10) || 1;
+    const data = TRINN_BAND_DATA[band] || TRINN_BAND_DATA[1];
+    document.title = `Kurzbeschreibung – ${data.title}`;
+
+    const flow = [
+      { type: 'title', heading: 'Kurzbeschreibung', subheading: `${data.title} – ${data.subtitle}` },
+      ...data.kurzbeschreibung.map((text) => ({ type: 'paragraph', text }))
+    ];
+
+    initBookReader({
+      flow: flow,
+      backHref: `trinn.html?band=${band}&scene=toc`
+    });
+  </script>
+</body>
+</html>
