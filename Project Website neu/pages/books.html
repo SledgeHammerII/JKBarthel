@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Books</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #0a0806;
+    overflow: hidden;
+  }
+
+  /* ============================================
+     BÜHNE 1: Books-Intro (NUR Papyrus-Zoom, kein
+     Hintergrundbild und kein Video mehr - sobald der
+     Zoom fertig ist, wird direkt zu Bühne 2 (Bücherrunde)
+     übergeblendet).
+     ============================================ */
+  .stage {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-image: url('../img/books/Buecherrunde.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .overlay-layer {
+    position: absolute;
+    inset: 0;
+
+    background-image: url('../img/books/papyrus.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    -webkit-mask-image: url('#textMask');
+    mask-image: url('#textMask');
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+
+    transform: scale(1);
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+
+  .mask-svg {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .mask-svg text {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+  }
+
+  .overlay-layer.zoom {
+    animation: zoomThrough 2.2s cubic-bezier(0.65, 0, 0.85, 0.15) forwards;
+  }
+
+  @keyframes zoomThrough {
+    0% { transform: scale(1); }
+    100% { transform: scale(18); }
+  }
+
+  /* ============================================
+     BÜHNE 2: Bücherrunde-Szene mit 8 interaktiven Büchern
+     ============================================
+     Wird sichtbar, sobald die Zoom-Animation der Bühne 1
+     fertig ist (sanfter Fade-Übergang, kein Video mehr
+     dazwischen).
+  */
+  .scene-rounde {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    z-index: 1;
+  }
+
+  .scene-rounde.visible {
+    opacity: 1;
+  }
+
+  .scene-rounde img.bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Unsichtbarer Button über jedem Buch (Banner + komplettes
+     Buch-Bild als Klickfläche). Beim Hover wird das Buch
+     heller/goldener UND der Reihen-Name erscheint groß mit
+     starkem Glow. */
+  .book-btn {
+    position: absolute;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    overflow: hidden;
+    /* Zum Testen der Position kann man hier kurzzeitig
+       eine Outline einschalten:
+       outline: 1px solid red;
+    */
+  }
+
+  /* Aufhellungs-/Golden-Filter, der beim Hover über das
+     Buch-Bild gelegt wird */
+  .book-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle,
+      rgba(255, 215, 130, 0.55) 0%,
+      rgba(255, 215, 130, 0.25) 55%,
+      rgba(255, 215, 130, 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    mix-blend-mode: screen; /* sorgt für "Aufhellen", nicht "Übermalen" */
+    pointer-events: none;
+  }
+
+  .book-btn:hover::before {
+    opacity: 1;
+  }
+
+  .book-btn:hover {
+    filter: brightness(1.25) saturate(1.15);
+  }
+
+  .book-btn span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.85);
+    color: #ffd76a; /* kräftiges Gold */
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    font-size: clamp(22px, 3.2vw, 44px);
+    text-shadow:
+      0 0 10px rgba(255, 215, 100, 0.95),
+      0 0 22px rgba(255, 180, 60, 0.85),
+      0 0 40px rgba(255, 160, 40, 0.6),
+      0 2px 4px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .book-btn:hover span {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===== BÜHNE 1: Nur Papyrus-Zoom-Intro ===== -->
+  <div class="stage" id="introStage">
+
+    <div class="overlay-layer" id="overlayLayer"></div>
+
+    <svg class="mask-svg" aria-hidden="true">
+      <defs>
+        <mask id="textMask" maskContentUnits="userSpaceOnUse" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="900">
+          <rect id="maskBg" x="0" y="0" width="1600" height="900" fill="white"></rect>
+          <text id="maskText"
+                text-anchor="middle"
+                dominant-baseline="central"
+                fill="black"></text>
+        </mask>
+      </defs>
+    </svg>
+
+  </div>
+
+  <!-- ===== BÜHNE 2: Bücherrunde-Szene mit 8 klickbaren Buchreihen ===== -->
+  <div class="scene-rounde" id="sceneRounde">
+    <img class="bg-img" src="../img/books/Buecherrunde.png" alt="Bücherrunde">
+
+    <!--
+      Koordinaten in % bezogen auf das Bild (object-fit: cover).
+      Jeder Button deckt Banner + komplettes Buch-Bild ab (große
+      Klickfläche, wie gewünscht). Klick führt DIREKT zur jeweiligen
+      Unterseite - kein Sub-Video mehr hier.
+
+      WICHTIG: Diese Werte sind aus der vorherigen Version übernommen,
+      bitte selbst nachjustieren, falls Banner/Bild nicht exakt
+      getroffen werden (z.B. kurzzeitig "outline: 1px solid red"
+      in .book-btn einschalten, um die Fläche zu sehen).
+    -->
+    <a class="book-btn" href="reihe1.html" style="left:19%; top:42%; width:14%; height:11%;">
+      <span>Buch 1</span>
+    </a>
+    <a class="book-btn" href="reihe2.html" style="left:35%; top:37%; width:13%; height:11%;">
+      <span>Buch 2</span>
+    </a>
+    <a class="book-btn" href="reihe3.html" style="left:52%; top:37%; width:13%; height:11%;">
+      <span>Buch 3</span>
+    </a>
+    <a class="book-btn" href="reihe4.html" style="left:63%; top:43%; width:13%; height:11%;">
+      <span>Buch 4</span>
+    </a>
+    <a class="book-btn" href="reihe5.html" style="left:13%; top:53%; width:15%; height:13%;">
+      <span>Buch 5</span>
+    </a>
+    <a class="book-btn" href="trinn.html" style="left:26%; top:63%; width:19%; height:15%;">
+      <span>Trinn</span>
+    </a>
+    <a class="book-btn" href="reihe7.html" style="left:54%; top:63%; width:19%; height:15%;">
+      <span>Buch 7</span>
+    </a>
+    <a class="book-btn" href="reihe8.html" style="left:70%; top:53%; width:15%; height:13%;">
+      <span>Buch 8</span>
+    </a>
+  </div>
+
+  <a href="../index.html" style="
+      position: fixed; top: 16px; left: 16px; z-index: 9999;
+      background: rgba(75, 46, 10, 0.78); color: #f5d1a0;
+      font-family: 'Baloo 2', sans-serif; font-weight: 600;
+      font-size: 0.95rem; text-decoration: none;
+      padding: 8px 14px; border-radius: 999px;
+      border: 1px solid rgba(245, 209, 160, 0.4);
+      backdrop-filter: blur(4px);">← Startseite</a>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('overlayLayer');
+      const maskText = document.getElementById('maskText');
+      const maskBg = document.getElementById('maskBg');
+      const textMask = document.getElementById('textMask');
+      const sceneRounde = document.getElementById('sceneRounde');
+      const introStage = document.getElementById('introStage');
+
+      // ---- Maske für "Books"-Text positionieren ----
+      function sizeMaskText() {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        textMask.setAttribute('width', w);
+        textMask.setAttribute('height', h);
+        maskBg.setAttribute('width', w);
+        maskBg.setAttribute('height', h);
+
+        const fontPx = w * 0.26;
+        maskText.setAttribute('x', w / 2);
+        maskText.setAttribute('y', h / 2);
+        maskText.style.fontFamily = "'Baloo 2', sans-serif";
+        maskText.style.fontWeight = '800';
+        maskText.style.fontSize = fontPx + 'px';
+        maskText.style.letterSpacing = '-0.01em';
+      }
+      sizeMaskText();
+      window.addEventListener('resize', sizeMaskText);
+
+      // ---- Ablauf: 1s warten -> Zoom -> direkt zur Bücherrunde ----
+      const START_DELAY_MS = 1000;
+      const ZOOM_DURATION_MS = 2200;
+
+      setTimeout(() => {
+        overlay.classList.add('zoom');
+      }, START_DELAY_MS);
+
+      // Sobald der Zoom fertig ist: Bücherrunde einblenden,
+      // Intro-Bühne danach ausblenden (kein Video mehr dazwischen).
+      setTimeout(() => {
+        sceneRounde.classList.add('visible');
+        setTimeout(() => {
+          introStage.style.display = 'none';
+        }, 900);
+      }, START_DELAY_MS + ZOOM_DURATION_MS);
+    });
+  </script>
+
+</body>
+</html>

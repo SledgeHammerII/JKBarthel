@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Write to the Author</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+			margin: 0;
+			padding: 0;
+			font-family: 'Baloo 2', cursive;
+			background-image: url("../img/Rolle.png");
+			background-size: cover; /* wieder wie vorher */
+			background-position: center top;
+			background-repeat: no-repeat;
+			min-height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+			padding-top: 60px;
+			background-color: #f7f1e3; /* bleibt als Fallback */
+		}
+
+		.contact-box {
+			width: 80%;
+			max-width: 700px;
+			background: transparent;
+			padding: 30px 40px;
+			border-radius: 10px;
+			margin-top: 50px;
+			margin-left: 0; /* keine negativen Werte */
+			text-align: left; /* statt center */
+			word-wrap: break-word;
+			overflow-wrap: break-word;
+			transform: translateX(-5%); /* leicht nach links verschieben */
+		}
+
+
+        h1 {
+            text-align: center;
+            margin: 0 auto 1rem auto;
+			font-size: clamp(1.5rem, 4vw, 2rem); /* skaliert mit Bildschirmbreite */
+        }
+
+        .intro-text {
+            text-align: center;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #3a2f22;
+            margin-bottom: 25px;
+            line-height: 1.4;
+			margin-left: -50px; /* nach links verschieben */
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+			margin-top: 1rem;
+        }
+
+        input, textarea {
+            width: 100%;
+			box-sizing: border-box;
+			padding: 10px;
+			border: none;
+			border-bottom: 1px solid rgba(60, 40, 20, 0.3);
+			background-color: transparent;
+			font-size: clamp(0.85rem, 1.2vw, 1rem);
+			outline: none;
+        }
+
+        textarea {
+            height: 250px; /* mehrere Zeilen */
+            resize: vertical;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(60, 40, 20, 0.5);
+            font-style: italic;
+        }
+
+        .helper-text {
+			font-size: 0.9rem;
+			font-style: italic;
+			color: #3a2f22;
+			margin-top: -200px;   /* höher = kleinerer Wert */
+			margin-left: 0px; /* weiter nach links */
+		}
+
+        .send-button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto 0 auto; /* etwas tiefer */
+        }
+
+        .send-button img {
+            width: 160px;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contact-box">
+        <h1>Write to the Author</h1>
+
+        <p class="intro-text">
+            Have a question, a favorite character, or a magical idea?<br>
+            Send a message and step into the adventure!
+        </p>
+
+        <!-- HINWEIS: Das Kontaktformular wird in einer späteren Phase
+             aktiv geschaltet (Supabase oder ein anderer Form-Dienst).
+             Aktuell ist die Form deaktiviert, damit kein Klick auf
+             "Senden" eine ungültige Anfrage auslöst. -->
+        <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Das Kontaktformular wird gerade eingerichtet. Bitte später nochmal probieren.');">
+
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required placeholder="Your name">
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required placeholder="Your email">
+
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" required placeholder="Write your message here..." maxlength="300"></textarea>
+			<p id="charCount">0 / 300</p>
+
+            <p class="helper-text">
+                Parents can also contact me for school readings, collaborations, and events.
+            </p>
+
+            <button class="send-button" type="submit">
+                <img src="../img/contact/Sendbutton.png" alt="Send Message">
+            </button>
+
+        </form>
+
+        <p style="text-align:center; margin-top: 30px;">
+            <a href="../index.html" style="color:#3a2f22; text-decoration:none; font-style:italic;">← Zurück zur Startseite</a>
+        </p>
+    </div>
+
+    <script>
+      // Erst wenn der DOM fertig ist, sind #message und #charCount verfügbar.
+      document.addEventListener('DOMContentLoaded', () => {
+        const textarea = document.getElementById("message");
+        const counter  = document.getElementById("charCount");
+        if (textarea && counter) {
+          textarea.addEventListener("input", () => {
+            counter.textContent = textarea.value.length + " / " + textarea.maxLength;
+          });
+        }
+      });
+    </script>
+</body>
+</html>
