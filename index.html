@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jakob Knut Barthel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 100vw;
+      min-height: 100vh;
+      background: #FFFFFF;
+      overflow-x: hidden;
+      font-family: 'Baloo 2', cursive;
+    }
+    /* -----------------------------------------------
+       HAUPT-BÜHNE: Rolle + Video skalieren gemeinsam
+    ----------------------------------------------- */
+    .stage {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      overflow: hidden;            /* WICHTIG: schneidet das Video ab statt es zu schrumpfen */
+      /* Tisch.png als Rand/Hintergrund, sichtbar überall dort, wo
+         RolleT.png (object-fit: contain) nicht ganz bis zum
+         Bildschirmrand reicht (Briefumschlag-Ränder links/rechts
+         oder oben/unten, je nach Bildschirmformat). */
+      background: #0a0806 url('img/trinn/Tisch.png') center center / cover no-repeat;
+    }
+    /* Das Rollenbild bleibt IMMER komplett sichtbar (nie oben/unten
+       abgeschnitten) - object-fit: contain statt cover. */
+    .stage .rolle-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      z-index: 3;                 /* ÜBER dem Video – das Loch ist transparent */
+      pointer-events: none;
+    }
+    /*
+      NEU: video-hole ist der Anker mit FESTER Pixelgröße.
+      width/height/top/left werden bei jedem Resize neu berechnet und
+      skalieren dabei EXAKT mit dem Bild mit (object-fit: contain kann
+      das Bild sehr unterschiedlich groß rendern, je nach Bildschirm-
+      format) - so bleibt das Loch immer genau passend zum tatsächlich
+      gezeichneten Loch im Bild, egal wie klein der Bildschirm ist.
+      Weißer Hintergrund als Papier-Rückwand: falls der Video-Ausschnitt
+      (object-fit: cover) die unregelmäßige Loch-Form nicht bis in jede
+      Ecke exakt ausfüllt, schimmert dort Weiß statt der Tisch.png-
+      Holzmaserung durch - sieht neben dem Video im Papierloch stimmiger
+      aus. Das Weiß bleibt dabei auf die Lochfläche selbst begrenzt.
+    */
+    .stage .video-hole {
+      position: absolute;
+      z-index: 2;                 /* UNTER dem PNG */
+      overflow: hidden;
+      background: #ffffff;
+      /* top/left/width/height kommen aus JS, siehe unten */
+    }
+    .stage .video-behind {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      /* Kleiner als der Anker (statt 100%), damit die weiße
+         Papier-Rückwand als sichtbarer Rand rundherum durchscheint,
+         statt komplett vom Video verdeckt zu werden. */
+      width: 70%;
+      height: 70%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;          /* füllt den festen Anker komplett aus */
+    }
+    /* -----------------------------------------------
+       CONTENT-SCHICHT (über allem)
+    ----------------------------------------------- */
+    .content {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      pointer-events: none;       /* Klicks durchlassen, außer explizit */
+    }
+    /* -----------------------------------------------
+       SEITENTEXT (rechts auf der Rolle)
+       Genau wie beim Video: FESTE Pixelgröße (Breite +
+       Schriftgröße ändern sich NICHT mehr), nur die
+       POSITION wird per JS an die Rolle angepasst.
+       top/left/width/font-size kommen komplett aus JS.
+    ----------------------------------------------- */
+    .side-text {
+      position: fixed;
+      font-family: 'Baloo 2', cursive;
+      color: #4a2e1a;
+      line-height: 1.5;
+      z-index: 20;
+      pointer-events: none;
+      /* Grünlicher Glow rund um den Text - dünn, eng am Buchstaben
+         anliegend statt weit ausstrahlend. */
+      text-shadow:
+        0 0 2px rgba(255, 255, 255, 1),
+        0 0 4px rgba(255, 255, 255, 0.05);
+    }
+    /* -----------------------------------------------
+       BUTTON-LEISTE UNTEN
+    ----------------------------------------------- */
+    .button-bar {
+      position: fixed;
+      bottom: 2vh;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 1vw;
+      z-index: 50;
+      pointer-events: all;
+    }
+    .button-bar a {
+      width: clamp(100px, 15vw, 230px);
+    }
+    .button-bar img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      transition: 0.3s ease;
+    }
+    .button-bar img:hover {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 12px rgba(255,180,80,1));
+    }
+    /* -----------------------------------------------
+       SUCHFUNKTION: findet Bücher, Hörbücher, Kurzfilme
+       und Art-Gallery-Bilder per Titel, Klick (oder Enter
+       bei eindeutigem Treffer) springt direkt zur Seite -
+       für alle, die gezielt suchen statt stöbern möchten.
+    ----------------------------------------------- */
+    /* top/left werden NICHT hier gesetzt, sondern per JS in
+       updateLayout() - die Suche sitzt damit immer direkt über dem
+       "Willkommen..."-Text auf der Rolle, genau wie der Text selbst
+       an die Bildskalierung gekoppelt. */
+    .site-search {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: all;
+      font-family: 'Baloo 2', cursive;
+    }
+
+    .site-search input {
+      width: clamp(160px, 22vw, 260px);
+      background: rgba(255, 248, 235, 0.92);
+      color: #4b2e0a;
+      font-family: 'Baloo 2', cursive;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px solid rgba(75, 46, 10, 0.3);
+      border-radius: 999px;
+      padding: 8px 16px;
+      outline: none;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .site-search input::placeholder {
+      color: rgba(75, 46, 10, 0.55);
+    }
+
+    .site-search-results {
+      margin-top: 6px;
+      background: rgba(255, 248, 235, 0.97);
+      border: 1px solid rgba(75, 46, 10, 0.25);
+      border-radius: 14px;
+      overflow: hidden;
+      display: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .site-search-results.visible {
+      display: block;
+    }
+
+    .site-search-results a {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 16px;
+      color: #4b2e0a;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(75, 46, 10, 0.12);
+    }
+
+    .site-search-results a:last-child {
+      border-bottom: none;
+    }
+
+    .site-search-results a:hover {
+      background: rgba(75, 46, 10, 0.12);
+    }
+
+    .site-search-results .result-category {
+      font-size: 0.75rem;
+      font-weight: 600;
+      opacity: 0.6;
+      white-space: nowrap;
+    }
+
+    .site-search-results .no-results {
+      padding: 9px 16px;
+      color: rgba(75, 46, 10, 0.6);
+      font-size: 0.9rem;
+    }
+
+    /* -----------------------------------------------
+       HAMBURGER-MENÜ
+    ----------------------------------------------- */
+    .menu-icon {
+      position: fixed;
+      top: 2vh;
+      right: 3vw;
+      font-size: 2.5rem;
+      color: #4b2e0a;
+      cursor: pointer;
+      z-index: 9999;
+      pointer-events: all;
+      text-shadow: 0 1px 4px rgba(255,255,255,0.4);
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 8vh;
+      right: 3vw;
+      background: rgba(255, 248, 235, 0.95);
+      border-radius: 10px;
+      padding: 1rem 1.5rem;
+      z-index: 9999;
+      text-align: right;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      pointer-events: all;
+    }
+    .mobile-menu a {
+      display: block;
+      font-family: 'Cinzel', serif;
+      color: #4b2e0a;
+      margin: 0.5rem 0;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    .mobile-menu a:hover { text-decoration: underline; }
+    /* -----------------------------------------------
+       DEKORATIVE BILDER (Efeu, Siegel)
+    ----------------------------------------------- */
+    .floating-img {
+      position: fixed;
+      z-index: 15;
+      pointer-events: none;
+    }
+    .efeu1 {
+      width: clamp(80px, 12vw, 200px);
+      bottom: 10vh;
+      left: 1vw;
+      transform: rotate(140deg);
+    }
+    .efeu2 {
+      width: clamp(80px, 12vw, 200px);
+      bottom: 10vh;
+      left: 15vw;
+      transform: rotate(150deg);
+    }
+    .siegel {
+      width: clamp(60px, 8vw, 140px);
+      bottom: 2vh;
+      right: 2vw;
+    }
+    /* -----------------------------------------------
+       RESPONSIVE
+    ----------------------------------------------- */
+    @media (max-width: 768px) {
+      .button-bar a { width: clamp(60px, 13vw, 120px); }
+      .button-bar { gap: 1.5vw; }
+    }
+  </style>
+</head>
+<body>
+<!-- =============================================
+     BÜHNE: Video UNTER dem PNG-Rollenbild
+============================================= -->
+<div class="stage" id="stage">
+  <!-- Video-Anker: feste Größe, Position folgt dem Loch -->
+  <div class="video-hole" id="videoHole">
+    <video class="video-behind" autoplay muted loop playsinline>
+      <source src="img/index/AnimationWolf1.mp4" type="video/mp4">
+    </video>
+  </div>
+  <!-- PNG-Rollenbild liegt darüber; das Brandloch ist transparent -->
+  <img class="rolle-img" id="rolleImg" src="img/index/RolleT.png" alt="">
+</div>
+<!-- =============================================
+     CONTENT
+============================================= -->
+<div class="content">
+  <!-- Suchfeld: findet Bücher, Hörbücher, Kurzfilme und Bilder -->
+  <div class="site-search" id="siteSearch">
+    <input
+      type="text"
+      id="siteSearchInput"
+      placeholder="🔍 Suchen…"
+      autocomplete="off"
+      aria-label="Website durchsuchen">
+    <div class="site-search-results" id="siteSearchResults"></div>
+  </div>
+
+  <!-- Hamburger-Icon -->
+  <div class="menu-icon" onclick="toggleMenu()">☰</div>
+  <!-- Mobiles Menü -->
+  <nav id="menu" class="mobile-menu">
+    <a href="pages/impressum.html">Impressum</a>
+    <a href="pages/datenschutz.html">Datenschutz</a>
+    <a href="pages/urheberrecht.html">Urheberrecht</a>
+    <a href="pages/nutzungsbedingungen.html">Nutzungsbedingungen</a>
+  </nav>
+  <!-- Fließtext rechts auf der Rolle -->
+  <div class="side-text" id="sideText">
+    <p>
+      <strong><span style="font-size: 28px;">Willkommen im Reich der Fantasie!</span><br>
+      Hier beginnen Abenteuer, die dich in ferne Welten<br>
+	  voller Magie, Geheimnisse und spannender Geschichten führen.<br>
+      <span style="font-size: 19px;">Tauche ein in meine Bücher, entdecke </span><br>
+	  fantastische Figuren und begleite sie auf ihren<br> 
+	  aufregenden Reisen.<br>
+	  <br>
+      Viel Spaß beim Entdecken – und vergiss nie: <br>
+	  <span style="font-size: 22px;">Die größte Magie steckt in deiner Fantasie!</span><br>
+    </p>
+  </div>
+  <!-- Dekorative Bilder -->
+  
+ 
+  <!-- Button-Leiste -->
+  <div class="button-bar">
+    
+	<a href="pages/movies.html"><img src="img/index/Shortfilms.png" alt="Movies & Shortfilms"></a>
+    <a href="pages/audiobook.html"><img src="img/index/Audiobooks.png" alt="Audiobooks"></a>
+	<a href="pages/books.html"><img src="img/index/Books.png" alt="Books"></a>
+    <a href="pages/artgallery.html"><img src="img/index/ArtGallery.png" alt="Art Gallery"></a>
+    
+    <a href="pages/author.html"><img src="img/index/About.png" alt="About the Author"></a>
+    <a href="pages/contact.html"><img src="img/index/Contact.png" alt="Contact"></a>
+  </div>
+</div>
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById('menu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  }
+  /* Menü schließen bei Klick außerhalb */
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('menu');
+    const icon = document.querySelector('.menu-icon');
+    if (!menu.contains(e.target) && !icon.contains(e.target)) {
+      menu.style.display = 'none';
+    }
+  });
+
+  /* =============================================
+     SUCHFUNKTION: durchsucht Bücher, Hörbücher,
+     Kurzfilme und Art-Gallery-Bilder gleichzeitig.
+
+     "title" ist der offizielle Name (falls schon
+     vorhanden), "aliases" sind zusätzliche Suchbegriffe.
+     Sobald ein Titel feststeht, hier einfach "title"
+     anpassen - die Suche funktioniert dann automatisch
+     mit dem neuen Namen.
+
+     ERWEITERN, sobald einzelne Hörbücher/Kurzfilme/Bilder
+     feststehen: statt des einen Sammel-Eintrags ("Hörbücher",
+     "Kurzfilme", "Art Gallery") pro Titel einen eigenen
+     Eintrag ergänzen, genau wie bei den Büchern unten -
+     category dabei jeweils passend setzen (z.B. "Hörbuch").
+  ============================================= */
+  const SITE_SEARCH_INDEX = [
+    { title: 'Trinn – Sohn des Werwolfjägers', href: 'pages/trinn.html', aliases: ['Trinn'], category: 'Buch' },
+    { title: 'Buch 1', href: 'pages/reihe1.html', aliases: [], category: 'Buch' },
+    { title: 'Buch 2', href: 'pages/reihe2.html', aliases: [], category: 'Buch' },
+    { title: 'Buch 3', href: 'pages/reihe3.html', aliases: [], category: 'Buch' },
+    { title: 'Buch 4', href: 'pages/reihe4.html', aliases: [], category: 'Buch' },
+    { title: 'Buch 5', href: 'pages/reihe5.html', aliases: [], category: 'Buch' },
+    { title: 'Buch 7', href: 'pages/reihe7.html', aliases: [], category: 'Buch' },
+    { title: 'Buch 8', href: 'pages/reihe8.html', aliases: [], category: 'Buch' },
+    { title: 'Hörbücher', href: 'pages/audiobook.html', aliases: ['Audiobook', 'Hörbuch'], category: 'Hörbuch' },
+    { title: 'Kurzfilme', href: 'pages/movies.html', aliases: ['Shortfilm', 'Shortfilms', 'Film'], category: 'Kurzfilm' },
+    { title: 'Art Gallery', href: 'pages/artgallery.html', aliases: ['Bilder', 'Kunst', 'Gallery'], category: 'Bild' }
+  ];
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput   = document.getElementById('siteSearchInput');
+    const searchResults = document.getElementById('siteSearchResults');
+
+    function renderResults(matches, query) {
+      if (query.trim() === '') {
+        searchResults.classList.remove('visible');
+        searchResults.innerHTML = '';
+        return;
+      }
+      if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="no-results">Nichts gefunden</div>';
+        searchResults.classList.add('visible');
+        return;
+      }
+      searchResults.innerHTML = matches
+        .map((item) => `<a href="${item.href}">${item.title}<span class="result-category">${item.category}</span></a>`)
+        .join('');
+      searchResults.classList.add('visible');
+    }
+
+    function findMatches(query) {
+      const q = query.trim().toLowerCase();
+      if (q === '') return [];
+      return SITE_SEARCH_INDEX.filter((item) => {
+        const haystack = [item.title, item.category, ...item.aliases].join(' ').toLowerCase();
+        return haystack.includes(q);
+      });
+    }
+
+    searchInput.addEventListener('input', () => {
+      renderResults(findMatches(searchInput.value), searchInput.value);
+    });
+
+    // Enter-Taste: bei genau einem Treffer direkt dorthin springen.
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const matches = findMatches(searchInput.value);
+        if (matches.length === 1) {
+          window.location.href = matches[0].href;
+        }
+      }
+    });
+
+    // Ergebnisliste schließen bei Klick außerhalb.
+    document.addEventListener('click', (e) => {
+      const searchBox = document.getElementById('siteSearch');
+      if (!searchBox.contains(e.target)) {
+        searchResults.classList.remove('visible');
+        searchResults.innerHTML = '';
+      }
+    });
+  });
+
+  /* =============================================
+     GEMEINSAME BERECHNUNG FÜR VIDEO + TEXT + SUCHE
+     Alle drei folgen exakt der Rolle (object-fit: contain -
+     das Bild ist IMMER komplett sichtbar, wird nie oben/unten
+     abgeschnitten), daher teilen sie sich denselben
+     Skalierungsfaktor. Nur die Größe (fix in px) bleibt für
+     jedes Element individuell - die Position wird hier
+     zentral berechnet.
+
+     WICHTIG bei object-fit: contain (statt cover): die
+     Skalierung MUSS mit Math.min() berechnet werden (kleinerer
+     der beiden Faktoren "passt rein" statt größerer Faktor
+     "füllt aus") - sonst driftet die Lochposition vom Video
+     weg vom tatsächlich gezeigten Bild ab.
+  ============================================= */
+
+  // Echte Pixelmaße der RolleT.png (Original-Bilddatei!) - per Skript
+  // nachgemessen (war vorher fälschlich 1672x941 eingetragen, dadurch
+  // waren Loch/Text minimal falsch skaliert/positioniert).
+  const IMG_NATURAL_WIDTH  = 1920;
+  const IMG_NATURAL_HEIGHT = 1080;
+
+  // --- VIDEO: Lochposition/-größe im Originalbild (px) - exakt an der
+  // transparenten Fläche in RolleT.png nachgemessen (Alpha-Kanal-Scan) ---
+  const HOLE_X = 211;
+  const HOLE_Y = 222;
+  const HOLE_W = 565;
+  const HOLE_H = 538;
+
+  // --- TEXT: Referenzpunkt im Originalbild (px), umgerechnet auf die
+  // korrigierte 1920x1080-Referenz (Faktor 1920/1672 bzw. 1080/941) ---
+  const TEXT_X = 1033;            // X-Position im Originalbild
+  const TEXT_Y = 321;             // Y-Position im Originalbild
+  const TEXT_WIDTH_PX = 480;      // feste Textbreite (px)
+  const TEXT_FONT_SIZE_PX = 19;   // feste Schriftgröße (px)
+
+  // --- SUCHE: sitzt direkt über dem "Willkommen..."-Text ---
+  const SEARCH_X = TEXT_X;
+  const SEARCH_Y = TEXT_Y - 80;
+
+  const stage      = document.getElementById('stage');
+  const videoHole  = document.getElementById('videoHole');
+  const sideText   = document.getElementById('sideText');
+  const siteSearch = document.getElementById('siteSearch');
+
+  // Feste Größen werden EINMALIG gesetzt, ändern sich nie wieder
+  // (das Video-Loch bekommt seine Größe dagegen bei jedem Resize neu
+  // zugewiesen, siehe updateLayout() - es MUSS mit dem Bild mitskalieren)
+  sideText.style.width    = TEXT_WIDTH_PX + 'px';
+  sideText.style.fontSize = TEXT_FONT_SIZE_PX + 'px';
+
+  function updateLayout() {
+    const containerW = stage.clientWidth;
+    const containerH = stage.clientHeight;
+
+    // Skalierungsfaktor, mit dem object-fit:contain das Bild tatsächlich skaliert
+    const scale = Math.min(
+      containerW / IMG_NATURAL_WIDTH,
+      containerH / IMG_NATURAL_HEIGHT
+    );
+
+    const renderedImgW = IMG_NATURAL_WIDTH * scale;
+    const renderedImgH = IMG_NATURAL_HEIGHT * scale;
+
+    // Abstand zwischen skaliertem Bild und Container-Rand (zentriert;
+    // bei "contain" ist das der Rand/Briefumschlag, in dem Tisch.png
+    // durchscheint statt eines Bild-Überstands wie bei "cover")
+    const offsetX = (renderedImgW - containerW) / 2;
+    const offsetY = (renderedImgH - containerH) / 2;
+
+    // --- VIDEO-GRÖSSE + POSITION ---
+    // Skaliert 1:1 mit dem Bild mit, damit das Loch bei jeder
+    // Bildschirmgröße exakt so groß bleibt wie das gezeichnete Loch.
+    const holeW = HOLE_W * scale;
+    const holeH = HOLE_H * scale;
+
+    const holeCenterXInImage = (HOLE_X + HOLE_W / 2) * scale;
+    const holeCenterYInImage = (HOLE_Y + HOLE_H / 2) * scale;
+    const holeCenterXInContainer = holeCenterXInImage - offsetX;
+    const holeCenterYInContainer = holeCenterYInImage - offsetY;
+
+    videoHole.style.width  = holeW + 'px';
+    videoHole.style.height = holeH + 'px';
+    videoHole.style.left = (holeCenterXInContainer - holeW / 2) + 'px';
+    videoHole.style.top  = (holeCenterYInContainer - holeH / 2) + 'px';
+
+    // --- TEXT-POSITION ---
+    const textXInImage = TEXT_X * scale;
+    const textYInImage = TEXT_Y * scale;
+
+    sideText.style.left = (textXInImage - offsetX) + 'px';
+    sideText.style.top  = (textYInImage - offsetY) + 'px';
+
+    // --- SUCHE-POSITION ---
+    const searchXInImage = SEARCH_X * scale;
+    const searchYInImage = SEARCH_Y * scale;
+
+    siteSearch.style.left = (searchXInImage - offsetX) + 'px';
+    siteSearch.style.top  = (searchYInImage - offsetY) + 'px';
+  }
+
+  window.addEventListener('resize', updateLayout);
+  window.addEventListener('DOMContentLoaded', updateLayout);
+  updateLayout();
+</script>
+</body>
+</html>
